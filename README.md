@@ -47,9 +47,9 @@ type Record struct {
 
 🐳 Running Locally (dev)
 
-\`\`\`bash
+\\\ bash
 go run cmd/main.go
-\`\`\`
+\\\
 
 Default config:
     •   Port: 8080
