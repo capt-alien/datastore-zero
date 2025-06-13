@@ -41,24 +41,25 @@ type Record struct {
     Key   string `json:"key" gorm:"primaryKey"`
     Value string `json:"value"`
 }
-
+```
 
 ---
 
-🐳 Running Locally (dev)
+## 🐳 Running Locally (dev)
 
-\\\ bash
+```bash
 go run cmd/main.go
-\\\
+```
 
 Default config:
-    •   Port: 8080
-    •   DB: ./data/data.db
+- Port: 8080
+- DB: ./data/data.db
 
 ---
-🚀 Deployment Plan
-1.  Dockerize the app
-2.  Mount /data to a PVC in Kubernetes
-3.  Configure environment with ConfigMaps/Secrets
-4.  Push metrics to Prometheus
-5.  Add CI/CD GitHub Actions for build/lint/test/deploy
+
+## 🚀 Deployment Plan
+1. Dockerize the app
+2. Mount /data to a PVC in Kubernetes
+3. Configure environment with ConfigMaps/Secrets
+4. Push metrics to Prometheus
+5. Add CI/CD GitHub Actions for build/lint/test/deploy
