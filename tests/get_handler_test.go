@@ -49,5 +49,5 @@ func TestGetHandler_IDNotFound(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, http.StatusNotFound, resp.Code, "Expected status 404 Not Found")
-	assert.Contains(t, resp.Body.String(), "id not found", "Expected error message in response")
+	assert.Contains(t, resp.Body.String(), "record not found", "Expected error message in response")
 }

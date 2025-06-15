@@ -44,5 +44,5 @@ func TestFullLifecycle(t *testing.T) {
 	getRespAgain := httptest.NewRecorder()
 	r.ServeHTTP(getRespAgain, getReqAgain)
 	assert.Equal(t, http.StatusNotFound, getRespAgain.Code, "GET after DELETE should return 404")
-	assert.Contains(t, getRespAgain.Body.String(), "id not found", "Expected error message after deletion")
+	assert.Contains(t, getRespAgain.Body.String(), "record not found", "Expected error message after deletion")
 }
