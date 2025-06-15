@@ -43,3 +43,20 @@ func TestListHandler(t *testing.T) {
 	assert.NoError(t, err, "Response should be valid JSON")
 	assert.Len(t, results, 2, "Expected two records in response")
 }
+
+func TestListHandler_EmptyDB(t *testing.T) {
+	db := SetupTestDB()
+	router := mockRouterList(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/store", nil)
+	resp := httptest.NewRecorder()
+
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, http.StatusOK, resp.Code, "Expected status 200 OK")
+
+	var results []dbmodel.Record
+	err := json.Unmarshal(resp.Body.Bytes(), &results)
+	assert.NoError(t, err, "Response should be valid JSON")
+	assert.Len(t, results, 0, "Expected zero records in response")
+}

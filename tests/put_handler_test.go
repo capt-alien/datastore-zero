@@ -8,8 +8,17 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/go-chi/chi/v5"
+	"gorm.io/gorm"
+	"github.com/capt-alien/datastore-zero/internal/handlers"
+
 )
 
+func MockRouterPut(database *gorm.DB) http.Handler {
+	r := chi.NewRouter()
+	r.Put("/store/{key}", handlers.PutHandler(database))
+	return r
+}
 
 func TestPutHandler(t *testing.T) {
 	db := SetupTestDB()
