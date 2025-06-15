@@ -16,7 +16,9 @@ This project is designed as a minimal, production-adaptable example of:
 - ✅ SQLite backend (Postgres-ready)
 - ✅ Dockerized and K8s-ready
 - ✅ Metrics endpoint for Prometheus
+- 🧲 `/hire` route – because marketing is a feature too
 - 🛡️ Optional: Auth headers, rate limiting, and tracing
+
 
 ---
 
@@ -27,6 +29,7 @@ This project is designed as a minimal, production-adaptable example of:
 | PUT    | `/store/:key`  | Store or update value  |
 | GET    | `/store/:key`  | Retrieve value by key  |
 | DELETE | `/store/:key`  | Delete value by key    |
+| GET    | `/hire`        | Fun route that says "hire me!" |
 
 _Optional future:_
 - `GET /store/` – list all keys
@@ -63,3 +66,18 @@ Default config:
 3. Configure environment with ConfigMaps/Secrets
 4. Push metrics to Prometheus
 5. Add CI/CD GitHub Actions for build/lint/test/deploy
+
+
+--
+
+## 🧲 Why "datastore-zero"?
+
+Because every great engineer should ship something that's:
+- Functional
+- Minimal
+- Tested
+- Deployable
+
+And ideally... gets them hired.
+
+👋 [Let's talk](mailto:ericbotcher@gmail.com.com) — or just run `curl http://localhost:8080/hire`
