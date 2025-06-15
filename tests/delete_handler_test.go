@@ -37,3 +37,16 @@ func TestDeleteHandler(t *testing.T) {
 	assert.Equal(t, http.StatusOK, resp.Code, "Expected status 200 OK")
 	assert.Contains(t, resp.Body.String(), "deleted", "Expected confirmation message")
 }
+
+func TestDeleteHandler_KeyNotFound(t *testing.T) {
+	db := SetupTestDB()
+	router := mockRouterDelete(db)
+
+	req := httptest.NewRequest(http.MethodDelete, "/store/nonexistentkey", nil)
+	resp := httptest.NewRecorder()
+
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, http.StatusNotFound, resp.Code, "Expected status 404 Not Found")
+	assert.Contains(t, resp.Body.String(), "key not found", "Expected error message in response")
+}
