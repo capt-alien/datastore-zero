@@ -11,14 +11,14 @@ import (
 	"gorm.io/gorm"
 )
 
-// mockRouter wires up only the PutHandler for isolated testing
+// MockRouter wires up the PUT handler using /store/{id}
 func MockRouter(database *gorm.DB) http.Handler {
 	r := chi.NewRouter()
-	r.Put("/store/{key}", handlers.PutHandler(database))
+	r.Put("/store/{id}", handlers.PutHandler(database))
 	return r
 }
 
-// setupTestDB sets up an in-memory SQLite DB for testing
+// SetupTestDB sets up an in-memory SQLite DB for testing
 func SetupTestDB() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 	if err != nil {

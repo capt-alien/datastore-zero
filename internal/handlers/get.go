@@ -13,12 +13,12 @@ func GetHandler(database *gorm.DB) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         w.Header().Set("Content-Type", "application/json")
 
-        key := chi.URLParam(r, "key")
+        id := chi.URLParam(r, "id")
 
         var record db.Record
-        err := database.First(&record, "key = ?", key).Error
+        err := database.First(&record, "id = ?", id).Error
         if err != nil {
-            JSONError(w, "key not found", http.StatusNotFound)
+            JSONError(w, "record not found", http.StatusNotFound)
             return
         }
 

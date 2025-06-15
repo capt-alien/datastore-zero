@@ -9,21 +9,20 @@ import (
     "gorm.io/gorm"
 )
 
-
 func DeleteHandler(database *gorm.DB) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         w.Header().Set("Content-Type", "application/json")
 
-        key := chi.URLParam(r, "key")
-        if key == "" {
-            JSONError(w, "missing key", http.StatusBadRequest)
+        id := chi.URLParam(r, "id")
+        if id == "" {
+            JSONError(w, "missing id", http.StatusBadRequest)
             return
         }
 
         var record db.Record
-        err := database.First(&record, "key = ?", key).Error
+        err := database.First(&record, "id = ?", id).Error
         if err != nil {
-            JSONError(w, "key not found", http.StatusNotFound)
+            JSONError(w, "record not found", http.StatusNotFound)
             return
         }
 

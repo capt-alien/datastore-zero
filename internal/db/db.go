@@ -10,7 +10,7 @@ import (
 )
 
 type Record struct {
-	Key   string `gorm:"primaryKey"`
+	ID    string `gorm:"column=id;primaryKey"`
 	Value string
 }
 

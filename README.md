@@ -24,16 +24,16 @@ This project is designed as a minimal, production-adaptable example of:
 
 ## 📦 API Endpoints
 
+
 | Method | Path           | Description            |
 |--------|----------------|------------------------|
-| PUT    | `/store/:key`  | Store or update value  |
-| GET    | `/store/:key`  | Retrieve value by key  |
-| DELETE | `/store/:key`  | Delete value by key    |
+| PUT    | `/store/:id`   | Store or update value  |
+| GET    | `/store/:id`   | Retrieve value by ID   |
+| DELETE | `/store/:id`   | Delete value by ID     |
+| GET    | `/store`       | List all records       |
 | GET    | `/hire`        | Fun route that says "hire me!" |
 
-_Optional future:_
-- `GET /store/` – list all keys
-- `POST /store/` – bulk insert from JSON
+---
 
 ---
 
@@ -41,7 +41,7 @@ _Optional future:_
 
 ```go
 type Record struct {
-    Key   string `json:"key" gorm:"primaryKey"`
+    ID    string `json:"id" gorm:"primaryKey"`
     Value string `json:"value"`
 }
 ```

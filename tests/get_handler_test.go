@@ -15,7 +15,7 @@ import (
 // mockRouterGet wires up only the GetHandler for isolated testing
 func MockRouterGet(database *gorm.DB) http.Handler {
 	r := chi.NewRouter()
-	r.Get("/store/{key}", handlers.GetHandler(database))
+	r.Get("/store/{id}", handlers.GetHandler(database))
 	return r
 }
 
@@ -23,14 +23,14 @@ func TestGetHandler(t *testing.T) {
 	db := SetupTestDB()
 
 	// Preload test record
-	testRecord := dbmodel.Record{Key: "testkey", Value: "testvalue"}
+	testRecord := dbmodel.Record{ID: "testid", Value: "testvalue"}
 	if err := db.Create(&testRecord).Error; err != nil {
 		t.Fatalf("failed to seed test data: %v", err)
 	}
 
 	router := MockRouterGet(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/store/testkey", nil)
+	req := httptest.NewRequest(http.MethodGet, "/store/testid", nil)
 	resp := httptest.NewRecorder()
 
 	router.ServeHTTP(resp, req)
@@ -39,15 +39,15 @@ func TestGetHandler(t *testing.T) {
 	assert.Contains(t, resp.Body.String(), "testvalue", "Expected response to contain 'testvalue'")
 }
 
-func TestGetHandler_KeyNotFound(t *testing.T) {
+func TestGetHandler_IDNotFound(t *testing.T) {
 	db := SetupTestDB()
 	router := MockRouterGet(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/store/nonexistentkey", nil)
+	req := httptest.NewRequest(http.MethodGet, "/store/nonexistentid", nil)
 	resp := httptest.NewRecorder()
 
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, http.StatusNotFound, resp.Code, "Expected status 404 Not Found")
-	assert.Contains(t, resp.Body.String(), "key not found", "Expected error message in response")
+	assert.Contains(t, resp.Body.String(), "id not found", "Expected error message in response")
 }

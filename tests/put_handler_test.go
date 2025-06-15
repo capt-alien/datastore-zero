@@ -1,6 +1,5 @@
 package tests
 
-
 import (
 	"bytes"
 	"net/http"
@@ -11,21 +10,20 @@ import (
 	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 	"github.com/capt-alien/datastore-zero/internal/handlers"
-
 )
 
 func MockRouterPut(database *gorm.DB) http.Handler {
 	r := chi.NewRouter()
-	r.Put("/store/{key}", handlers.PutHandler(database))
+	r.Put("/store/{id}", handlers.PutHandler(database))
 	return r
 }
 
 func TestPutHandler(t *testing.T) {
 	db := SetupTestDB()
-	router := MockRouter(db)
+	router := MockRouterPut(db)
 
 	reqBody := []byte("test value")
-	req := httptest.NewRequest(http.MethodPut, "/store/testkey", bytes.NewReader(reqBody))
+	req := httptest.NewRequest(http.MethodPut, "/store/testid", bytes.NewReader(reqBody))
 	resp := httptest.NewRecorder()
 
 	router.ServeHTTP(resp, req)
@@ -36,9 +34,9 @@ func TestPutHandler(t *testing.T) {
 
 func TestPutHandler_BadRequest(t *testing.T) {
 	db := SetupTestDB()
-	router := MockRouter(db)
+	router := MockRouterPut(db)
 
-	req := httptest.NewRequest(http.MethodPut, "/store/badkey", nil) // nil body == bad request
+	req := httptest.NewRequest(http.MethodPut, "/store/badid", nil) // nil body == bad request
 	resp := httptest.NewRecorder()
 
 	router.ServeHTTP(resp, req)

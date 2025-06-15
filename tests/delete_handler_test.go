@@ -14,16 +14,15 @@ import (
 
 func mockRouterDelete(database *gorm.DB) http.Handler {
 	r := chi.NewRouter()
-	r.Delete("/store/{key}", handlers.DeleteHandler(database))
+	r.Delete("/store/{id}", handlers.DeleteHandler(database))
 	return r
 }
-
 
 func TestDeleteHandler(t *testing.T) {
 	db := SetupTestDB()
 
 	// Preload a record to delete
-	testRecord := dbmodel.Record{Key: "testy", Value: "mctestface"}
+	testRecord := dbmodel.Record{ID: "testy", Value: "mctestface"}
 	if err := db.Create(&testRecord).Error; err != nil {
 		t.Fatalf("failed to seed test data: %v", err)
 	}
@@ -38,15 +37,15 @@ func TestDeleteHandler(t *testing.T) {
 	assert.Contains(t, resp.Body.String(), "deleted", "Expected confirmation message")
 }
 
-func TestDeleteHandler_KeyNotFound(t *testing.T) {
+func TestDeleteHandler_IDNotFound(t *testing.T) {
 	db := SetupTestDB()
 	router := mockRouterDelete(db)
 
-	req := httptest.NewRequest(http.MethodDelete, "/store/nonexistentkey", nil)
+	req := httptest.NewRequest(http.MethodDelete, "/store/nonexistentid", nil)
 	resp := httptest.NewRecorder()
 
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, http.StatusNotFound, resp.Code, "Expected status 404 Not Found")
-	assert.Contains(t, resp.Body.String(), "key not found", "Expected error message in response")
+	assert.Contains(t, resp.Body.String(), "id not found", "Expected error message in response")
 }

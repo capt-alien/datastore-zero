@@ -23,8 +23,8 @@ func TestListHandler(t *testing.T) {
 	db := SetupTestDB()
 
 	testRecords := []dbmodel.Record{
-		{Key: "testy", Value: "mcTestFace"},
-		{Key: "testareno", Value: "faceTest"},
+		{ID: "testy", Value: "mcTestFace"},
+		{ID: "testareno", Value: "faceTest"},
 	}
 	if err := db.Create(&testRecords).Error; err != nil {
 		t.Fatalf("failed to seed test data: %v", err)
