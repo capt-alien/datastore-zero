@@ -7,8 +7,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/capt-alien/datastore-zero/internal/handlers"
-	"github.com/capt-alien/datastore-zero/tests"
 	"github.com/stretchr/testify/assert"
 )
 
