@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    environment:
+      - DB_USER=dsuser
+      - DB_PASS=secret
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=datastore
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:11.8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=datastore
+      - MYSQL_USER=dsuser
+      - MYSQL_PASSWORD=secret
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

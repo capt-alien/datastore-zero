@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datastore-app
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datastore
+  template:
+    metadata:
+      labels:
+        app: datastore
+    spec:
+      containers:
+        - name: datastore
+          image: ghcr.io/capt-alien/datastore-zero:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: datastore-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datastore-service
+  namespace: demo
+spec:
+  selector:
+    app: datastore
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
