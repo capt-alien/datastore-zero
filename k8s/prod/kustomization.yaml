@@ -5,6 +5,6 @@ namespace: prod
 
 resources:
   - ../base
-  - ../datastore-app.yaml
-  - ../datastore-db.yaml
-  - ../datastore-secret.yaml
+  - datastore-app.yaml
+  - datastore-db.yaml
+  - datastore-secret.yaml

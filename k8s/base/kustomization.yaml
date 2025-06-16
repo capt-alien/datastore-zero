@@ -1,4 +1,7 @@
 resources:
   - deployment.yaml
-  - service.yaml
   - pvc.yaml
+  - service.yaml
+  - datastore-app.yaml
+  - datastore-db.yaml
+  - datastore-secret.yaml

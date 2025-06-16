@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datastore-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datastore
+  template:
+    metadata:
+      labels:
+        app: datastore
+    spec:
+      imagePullSecrets:
+        - name: ghcr-creds
+      containers:
+        - name: datastore
+          image: ghcr.io/capt-alien/datastore-zero:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: datastore-secret
