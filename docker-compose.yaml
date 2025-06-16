@@ -1,37 +1,29 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  mariadb:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      DB_USER: root
+      DB_PASS: secret
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: datastore
+    depends_on:
+      - db
+
+  db:
     image: mariadb:11
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: datastore
-      MYSQL_USER: dsuser
-      MYSQL_PASSWORD: dspass
-    ports:
-      - "3306:3306"
     volumes:
-      - mariadb-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5docker
-
-  datastore-zero:
-    build: .
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    environment:
-      DB_USER: dsuser
-      DB_PASS: dspass
-      DB_HOST: mariadb
-      DB_PORT: 3306
-      DB_NAME: datastore
-    ports:
-      - "8080:8080"
+      - db_data:/var/lib/mysql
 
 volumes:
-  mariadb-data:
+  db_data:

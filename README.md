@@ -4,7 +4,7 @@ A simple key-value store API built in Go with persistent storage and Kubernetes-
 
 This project is designed as a minimal, production-adaptable example of:
 - Writing a RESTful API in Go
-- Using SQLite (or Postgres) as a backend
+- Using MariaDB as a backend
 - Persisting data via PVCs in Kubernetes
 - Building, containerizing, and deploying a service with full CI/CD support
 
@@ -13,7 +13,7 @@ This project is designed as a minimal, production-adaptable example of:
 ## 🔧 Features
 
 - ✅ Simple key/value CRUD API
-- ✅ SQLite backend (Postgres-ready)
+- ✅ MariaDB backend
 - ✅ Dockerized and K8s-ready
 - ✅ Metrics endpoint for Prometheus
 - 🧲 `/hire` route – because marketing is a feature too
