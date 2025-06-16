@@ -1,13 +1,14 @@
+---
 name: CI Pipeline
 
 on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request: {}
 
 jobs:
-build-test:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
