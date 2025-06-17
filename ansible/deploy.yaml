@@ -1,0 +1,6 @@
+# ansible/deploy.yaml
+- name: Deploy datastore-zero app
+  hosts: dz1
+  become: yes
+  roles:
+    - deploy

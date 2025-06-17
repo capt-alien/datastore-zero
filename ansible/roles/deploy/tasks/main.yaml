@@ -1,0 +1,31 @@
+- name: Install Git
+  apt:
+    name: git
+    state: present
+  become: true
+
+- name: Clone datastore-zero repo
+  git:
+    repo: https://github.com/capt-alien/datastore-zero.git
+    dest: /home/ubuntu/datastore-zero
+    version: main
+    force: yes
+  become: true
+
+- name: Ensure kubectl is installed
+  command: which kubectl
+  register: kubectl_check
+  ignore_errors: true
+
+- name: Install kubectl if not present
+  apt:
+    name: kubectl
+    state: present
+  when: kubectl_check.rc != 0
+  become: true
+
+- name: Apply Kustomize manifests
+  command: kubectl apply -k {{ app_kustomize_dir }}
+  args:
+    chdir: /home/ubuntu/datastore-zero/k8s/
+  become: true
