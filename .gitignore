@@ -35,3 +35,16 @@ go.work.sum
 *.db
 /data/
 data/data.db
+
+# OpenTofu / Terraform sensitive and state files
+.opentofu/
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
