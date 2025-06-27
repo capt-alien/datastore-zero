@@ -1,2 +1,8 @@
 # ansible/group_vars/all.yaml
 app_kustomize_dir: staging
+
+ansible_user: ubuntu
+ansible_ssh_private_key_file: ~/.ssh/dz1-key
+
+target_namespace: prod
+backend_image: ghcr.io/capt-alien/datastore-zero:latest

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datastore-zero
+  namespace: {{ target_namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datastore-zero
+  template:
+    metadata:
+      labels:
+        app: datastore-zero
+    spec:
+      containers:
+        - name: datastore-zero
+          image: {{ backend_image }}
+          ports:
+            - containerPort: 80
