@@ -1,3 +1,90 @@
+- name: Add Kubernetes APT GPG key (modern method)
+  become: true
+  shell: |
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+    gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+
+- name: Add Kubernetes APT repo (modern method)
+  become: true
+  copy:
+    content: |
+      deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    mode: '0644'
+
+- name: Run apt update
+  become: true
+  command: apt update
+
+- name: Install kubeadm, kubelet, kubectl
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - kubeadm
+    - kubelet
+    - kubectl
+
+- name: Install containerd
+  become: true
+  apt:
+    name: containerd
+    state: present
+
+- name: Load br_netfilter module
+  become: true
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Set required sysctl values for Kubernetes networking
+  become: true
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { name: 'net.bridge.bridge-nf-call-iptables', value: 1 }
+    - { name: 'net.ipv4.ip_forward', value: 1 }
+
+- name: Ensure containerd is enabled and running
+  become: true
+  service:
+    name: containerd
+    enabled: yes
+    state: started
+
+- name: Ensure pip is installed
+  become: true
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Ensure kubernetes Python client is installed
+  become: true
+  pip:
+    name: kubernetes
+    executable: pip3
+
+- name: Initialize Kubernetes cluster (if not already done)
+  become: true
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Mem,CRI,FileContent
+  args:
+    creates: /etc/kubernetes/admin.conf
+
+- name: Ensure kubeconfig exists for ubuntu user
+  become: true
+  command: >
+    bash -c "mkdir -p /home/ubuntu/.kube &&
+             cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config &&
+             chown ubuntu:ubuntu /home/ubuntu/.kube/config"
+  args:
+    creates: /home/ubuntu/.kube/config
+
 - name: Ensure target namespace exists
   kubernetes.core.k8s:
     state: present
@@ -6,6 +93,13 @@
       kind: Namespace
       metadata:
         name: "{{ target_namespace }}"
+  environment:
+    KUBECONFIG: /home/ubuntu/.kube/config
+
+- name: Create PersistentVolumeClaim
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'pvc.yaml.j2') }}"
   environment:
     KUBECONFIG: /home/ubuntu/.kube/config
 

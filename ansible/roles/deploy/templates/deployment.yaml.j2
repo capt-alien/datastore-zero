@@ -18,3 +18,10 @@ spec:
           image: {{ backend_image }}
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: datastore-volume
+              mountPath: /data
+      volumes:
+        - name: datastore-volume
+          persistentVolumeClaim:
+            claimName: datastore-zero-pvc
