@@ -7,5 +7,5 @@ variable "ami_id" {
   description = "The AMI to use for the instance"
 }
 variable "instance_type" {
-  default = "t3.micro"
+  default = "t3.small"
 }
