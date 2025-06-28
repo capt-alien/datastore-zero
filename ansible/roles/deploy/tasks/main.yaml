@@ -96,7 +96,23 @@
   environment:
     KUBECONFIG: /home/ubuntu/.kube/config
 
-- name: Create PersistentVolumeClaim
+- name: Ensure mount path exists for static volume
+  become: true
+  file:
+    path: /mnt/datastore-zero
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy static PersistentVolume
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'pv.yaml.j2') }}"
+  environment:
+    KUBECONFIG: /home/ubuntu/.kube/config
+
+- name: Deploy PersistentVolumeClaim
   kubernetes.core.k8s:
     state: present
     definition: "{{ lookup('template', 'pvc.yaml.j2') }}"
